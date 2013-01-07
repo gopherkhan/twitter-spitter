@@ -6,10 +6,13 @@
     <link rel="stylesheet" href="styles.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://cloud.github.com/downloads/emberjs/ember.js/ember-0.9.6.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="app.js"></script>
 </head>
 <body>
 <script type="text/x-handlebars">
+    <!-- put this in css once I start styling -->
+    <div id="graphy-graph" style="float:right"></div>
     <div id="frm">
         <b>Load Tweets for: </b>
         {{view App.SearchTextField placeholder="Twitter username" valueBinding="App.tweetsController.username"}}
@@ -40,6 +43,8 @@
                 {{/each}}
             </ul>
         </div>
+
+
     </div>
 </script>
 </body>

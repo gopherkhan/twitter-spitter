@@ -33,6 +33,7 @@ App.SearchTextField = Em.TextField.extend({
 App.tweetsController = Em.ArrayController.create({
 	content: [],
 	username: '',
+	preppedSVG: false,
 	loadTweets: function() {
 		var me = this;
 		var username = me.get("username");
@@ -51,9 +52,38 @@ App.tweetsController = Em.ArrayController.create({
 						date: value.created_at
 					});
 					me.pushObject(t);
-				})
+				});
+				me.graphData();
 			});
 		}
+	},
+
+	graphData: function() {
+		// nonsense for now....
+		var rawData = [];
+		this.content.forEach(function(elem) {
+			rawData.push({date: elem.date, text: elem.text});
+		});
+
+		var colors = ["aquamarine", "burlywood", "coral", "darkseagreen"]; // add some that make sense
+		var selection = this.preppedSVG ? d3.select('#graphy-graph').select('svg') :  d3.select('#graphy-graph').append("svg").attr("width", 300).attr('height',300);
+
+
+		var circles = selection.selectAll('circle').data(rawData);
+		circles.enter().append('circle');
+		var baseColor = '137';
+		circles.attr('cx', function(d, i) {
+			return ~~((i * 100) % 300);
+		}).attr('cy', function(d, i) {
+				return ~~((Math.sqrt(d.text.length) * 100) % 300);
+			}).attr('r', function(d, i) {
+				return 5 * ~~Math.sqrt(d.text.length);
+			}).style('fill', function(d, i) {
+				return colors[d.text.length % colors.length];
+			} );
+		circles.exit().remove();
+
+		this.set('preppedSVG', true);
 	}
 });
 
