@@ -78,7 +78,7 @@ App.tweetsController = Em.ArrayController.create({
 			rawData.push({date: elem.date, text: elem.text});
 		});
 
-		var graphWidth = 500;
+		var graphWidth = 700;
 		var graphHeight = 500;
 		var colors = ["aquamarine", "burlywood", "coral", "darkseagreen", "#666666", "#BADA55", "cornflowerblue", "crimson"]; // add some that make sense
 		var selection = this.preppedSVG ? d3.select('#graphy-graph').select('svg') :  d3.select('#graphy-graph').append("svg").attr("width", graphWidth).attr('height',graphHeight);
@@ -97,24 +97,24 @@ App.tweetsController = Em.ArrayController.create({
 
 		var circles = selection.selectAll('circle').data(wordsArr);
 		circles.enter().append('circle');
-		var baseColor = '137';
+
+		circles.exit().remove();
+
 		circles.transition().
 			delay(function(d,i) {
 				// a sort of wave pattern.
 				// each item transitions 200 millis after the previous one starts
-				return (i+1) * 200;
+				return (i+1) * 50;
 			}).duration(2000).
-
-			attr('cx', function(d, i) {
-				return ~~(((i * 50) / d.freq) % graphWidth);
-			}).attr('cy', function(d, i) {
-				return ~~((Math.sqrt(d.text.length) * 100) % graphHeight);
-			}).attr('r', function(d, i) {
-				return 10 * d.text.length;
-			}).style('fill', function(d, i) {
-				return colors[d.text.length % colors.length];
-			}).style('opacity', opacitizer);
-		circles.exit().remove();
+				attr('cx', function(d, i) {
+					return ~~(((i * 50) / d.freq) % graphWidth);
+				}).attr('cy', function(d, i) {
+					return ~~((d.text.length * 37) % graphHeight);
+				}).attr('r', function(d, i) {
+					return 10 * d.text.length;
+				}).style('fill', function(d, i) {
+					return colors[d.text.length % colors.length];
+				}).style('opacity', opacitizer);
 
 		this.set('preppedSVG', true);
 	}
