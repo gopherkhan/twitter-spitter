@@ -109,7 +109,7 @@ App.tweetsController = Em.ArrayController.create({
 				attr('cx', function(d, i) {
 					return ~~(((i * 50) / d.freq) % graphWidth);
 				}).attr('cy', function(d, i) {
-					return ~~((d.text.length * 37) % graphHeight);
+					return ~~(((d.text.length * 37 )/ d.freq) % graphHeight);
 				}).attr('r', function(d, i) {
 					return 10 * d.text.length;
 				}).style('fill', function(d, i) {

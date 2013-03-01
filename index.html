@@ -3,20 +3,32 @@
 <head>
     <title>Tweets</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="css/styles.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://cloud.github.com/downloads/emberjs/ember.js/ember-0.9.6.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="app.js"></script>
 </head>
 <body>
+
+<div class="container">
+    <div class="page-header">
+        <h1>The Twitter Spitter</h1>
+    </div>
+    <p class="lead">Enter a twitter handle to see the birdy paint a picture!</p>
+    <!--<p>It's so colorful!</p> -->
+
 <script type="text/x-handlebars">
     <!-- put this in css once I start styling -->
-    <div id="graphy-graph" style="float:right"></div>
     <div id="frm">
         <b>Load Tweets for: </b>
         {{view App.SearchTextField placeholder="Twitter username" valueBinding="App.tweetsController.username"}}
-        <button {{action "loadTweets" target="App.tweetsController"}}>Go!</button>
+        <button class="btn btn-primary" {{action "loadTweets" target="App.tweetsController"}}>Go!</button>
+    </div>
+    <h1 class="spitting-name">{{App.tweetsController.username}}</h1>
+    <div id="graphy-graph">
+        <img class="spitting-bird" src="images/bird2.png"/>
     </div>
     <div id="content">
         <div id="recent">
@@ -35,7 +47,7 @@
             <ul>
                 {{#each App.tweetsController}}
                 <li>
-                    <img {{bindAttr src="avatar"}} />
+                    <img {{bindAttr src="avatar"}} class="person-image" />
                     <span>{{date}}</span>
                     <h3>{{screen_name}}</h3>
                     <p>{{text}}</p>
@@ -43,9 +55,13 @@
                 {{/each}}
             </ul>
         </div>
-
-
     </div>
 </script>
+</div>
+<div id="footer">
+    <div class="container">
+        <p class="muted credit">Twitter Spitter by <a href="http://github.com/gopherkhan">Chris Nelson</a>.</p>
+    </div>
+</div>
 </body>
 </html>

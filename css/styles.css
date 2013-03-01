@@ -58,5 +58,27 @@ body {
 
 .person-name {
     float: left;
+}
 
+#graphy-graph {
+    position: relative;
+    min-height: 500px;
+}
+
+.spitting-bird {
+    position: absolute;
+    left: -78px;
+    top: -97px;
+    z-index: 9000;
+}
+
+.spitting-name {
+    min-height: 40px;
+    margin-left: 75px;
+}
+
+#frm {
+    padding-left: 77px;
+    vertical-align: middle;
+    display: table-cell;
 }
