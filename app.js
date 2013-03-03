@@ -64,6 +64,8 @@ App.tweetsController = Em.ArrayController.create({
 		var words = {};
 		var wordCount = 0;
 		var stripper = /[^a-z\ ]/gi;
+		var arr = [2,3,2,2,1,1,2,3];
+
 		this.content.forEach(function(elem) {
 			var stripped = elem.text.replace(stripper, "").trim();
 			var elems = stripped.split(" ");
@@ -80,7 +82,7 @@ App.tweetsController = Em.ArrayController.create({
 
 		var graphWidth = 700;
 		var graphHeight = 500;
-		var colors = ["aquamarine", "burlywood", "coral", "darkseagreen", "#666666", "#BADA55", "cornflowerblue", "crimson"]; // add some that make sense
+		var colors = ["aquamarine", "burlywood", "darkseagreen", "coral", "darkmagenta", "#BADA55", "cornflowerblue", "crimson", "gold"]; // add some that make sense
 		var selection = this.preppedSVG ? d3.select('#graphy-graph').select('svg') :  d3.select('#graphy-graph').append("svg").attr("width", graphWidth).attr('height',graphHeight);
 
 		var wordsArr = [];
@@ -98,7 +100,12 @@ App.tweetsController = Em.ArrayController.create({
 		var circles = selection.selectAll('circle').data(wordsArr);
 		circles.enter().append('circle');
 
-		circles.exit().remove();
+		var removeIdx = 0;
+		circles.exit().transition().
+			delay(function(d,i) {
+				return (i+1) * 50;
+			}).duration(2000).
+				attr('cx', graphWidth).attr('cy', graphHeight).attr('r', 0).style('fill', 'black').style('opacity', 1.0).remove();
 
 		circles.transition().
 			delay(function(d,i) {
@@ -113,7 +120,8 @@ App.tweetsController = Em.ArrayController.create({
 				}).attr('r', function(d, i) {
 					return 10 * d.text.length;
 				}).style('fill', function(d, i) {
-					return colors[d.text.length % colors.length];
+					//d.text.length
+					return colors[i % colors.length];
 				}).style('opacity', opacitizer);
 
 		this.set('preppedSVG', true);
