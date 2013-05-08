@@ -98,7 +98,8 @@ App.tweetsController = Em.ArrayController.create({
 		};
 
 		var circles = selection.selectAll('circle').data(wordsArr);
-		circles.enter().append('circle');
+		circles.enter().append('circle').
+										attr('cy', 0).attr('cx', 0).attr('r', 0);
 
 		var removeIdx = 0;
 		circles.exit().transition().
