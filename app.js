@@ -103,7 +103,7 @@ App.tweetsController = Em.ArrayController.create({
 								attr('cx', 0).
 								attr('cy', 0).
 								attr('r', 0).
-								style('fill', '#000000');
+								style('fill', '#999999');
 
 		var removeIdx = 0;
 		circles.exit().transition().
@@ -113,7 +113,7 @@ App.tweetsController = Em.ArrayController.create({
 				attr('cx', graphWidth).
 				attr('cy', graphHeight).
 				attr('r', 0).
-				style('fill', '#000000').
+				style('fill', '#999999').
 				style('opacity', 1.0).
 				remove();
 
