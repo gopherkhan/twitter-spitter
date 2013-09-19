@@ -38,12 +38,14 @@ App.tweetsController = Em.ArrayController.create({
 		var me = this;
 		var username = me.get("username");
 		if ( username ) {
-			var url = 'http://api.twitter.com/1/statuses/user_timeline.json'
+			var url = '/twitter-spitter/twitter_talker.php'
 			url += '?screen_name=%@&callback=?'.fmt(me.get("username"));
 			// push username to recent user array
 			App.recentUsersController.addUser(username);
-			$.getJSON(url,function(data){
+			$.get(url, function(data) {
 				me.set('content', []);
+
+				data = JSON.parse(data);
 				$(data).each(function(index,value){
 					var t = App.Tweet.create({
 						avatar: value.user.profile_image_url,
@@ -64,7 +66,6 @@ App.tweetsController = Em.ArrayController.create({
 		var words = {};
 		var wordCount = 0;
 		var stripper = /[^a-z\ ]/gi;
-		var arr = [2,3,2,2,1,1,2,3];
 
 		this.content.forEach(function(elem) {
 			var stripped = elem.text.replace(stripper, "").trim();
@@ -98,14 +99,18 @@ App.tweetsController = Em.ArrayController.create({
 		};
 
 		var circles = selection.selectAll('circle').data(wordsArr);
-		circles.enter().append('circle');
+		circles.enter().append('circle').
+								attr('cx', 0).
+								attr('cy', 0).
+								attr('r', 0).
+								style('fill', '#ffffff');
 
 		var removeIdx = 0;
 		circles.exit().transition().
 			delay(function(d,i) {
 				return (i+1) * 50;
 			}).duration(2000).
-				attr('cx', graphWidth).attr('cy', graphHeight).attr('r', 0).style('fill', 'black').style('opacity', 1.0).remove();
+				attr('cx', graphWidth).attr('cy', graphHeight).attr('r', 0).style('fill', '#ffffff').style('opacity', 1.0).remove();
 
 		circles.transition().
 			delay(function(d,i) {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Tweets</title>
+    <title>Spit those Tweets</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="css/styles.css">
@@ -27,7 +27,7 @@
         {{view App.SearchTextField placeholder="Twitter username" valueBinding="App.tweetsController.username"}}
         <button class="btn btn-primary" {{action "loadTweets" target="App.tweetsController"}}>Go!</button>
     </div>
-    <h1 class="spitting-name">{{App.tweetsController.username}}</h1>
+    <h1 class="spitting-name">{{ App.tweetsController.username }}</h1>
     <div id="graphy-graph">
         <img class="spitting-bird" src="images/bird3.png"/>
         <img class="catching-bird" src="images/bird.png"/>
