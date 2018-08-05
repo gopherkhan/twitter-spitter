@@ -1,73 +1,33 @@
-// Base code following ember tutorial here:
-// https://www.adobe.com/devnet/html5/articles/flame-on-a-beginners-guide-to-emberjs.html
-// will be tweaking this to make moar inneresting
-
 /**************************
- * Application
- **************************/
-App = Em.Application.create();
-
-/**************************
- * Models
- **************************/
-App.Tweet = Em.Object.extend({
-	avatar: null,
-	screen_name: null,
-	text: null,
-	date: null
-});
-
-/**************************
- * Views
- **************************/
-App.SearchTextField = Em.TextField.extend({
-	insertNewline: function(){
-		App.tweetsController.loadTweets();
-	}
-});
-
-/**************************
- * Controllers
+ * Streamlined Twitter S#!tter
  **************************/
 
-App.tweetsController = Em.ArrayController.create({
-	content: [],
-	username: '',
-	preppedSVG: false,
-	loadTweets: function() {
-		var me = this;
-		var username = me.get("username");
-		if ( username ) {
-			var url = '/twitter-spitter/twitter_talker.php'
-			url += '?screen_name=%@&callback=?'.fmt(me.get("username"));
-			// push username to recent user array
-			App.recentUsersController.addUser(username);
-			$.get(url, function(data) {
-				me.set('content', []);
+function TweetBlaster(selector) {
+	let content = [];
+	let username =  '';
+	let preppedSVG = false;
+	const container = document.querySelector(selector);
+	if (!container) { throw `Element ${selector} not found`; }
 
-				data = JSON.parse(data);
-				$(data).each(function(index,value){
-					var t = App.Tweet.create({
-						avatar: value.user.profile_image_url,
-						screen_name: value.user.screen_name,
-						text: value.text,
-						date: value.created_at
-					});
-					me.pushObject(t);
-				});
-				me.graphData();
-			});
-		}
-	},
+	const nameLabel = container.querySelector('.spitting-name');
+	const tweetList = container.querySelector('.tweet-list');
+	const form = container.querySelector('#frm');
+	const field = form.querySelector('#user-field');
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		nameLabel.innerText = field.value;
+		fetchData(field.value);
+	});
 
-	graphData: function() {
+	function graphData(tweets) {
 		// nonsense for now....
 		var rawData = [];
 		var words = {};
 		var wordCount = 0;
 		var stripper = /[^a-z\ ]/gi;
 
-		this.content.forEach(function(elem) {
+		tweets.forEach(function(elem) {
 			var stripped = elem.text.replace(stripper, "").trim();
 			var elems = stripped.split(" ");
 			wordCount += elems.length;
@@ -83,8 +43,10 @@ App.tweetsController = Em.ArrayController.create({
 
 		var graphWidth = 700;
 		var graphHeight = 500;
-		var colors = ["aquamarine", "burlywood", "darkseagreen", "coral", "darkmagenta", "#BADA55", "cornflowerblue", "crimson", "gold"]; // add some that make sense
-		var selection = this.preppedSVG ? d3.select('#graphy-graph').select('svg') :  d3.select('#graphy-graph').append("svg").attr("width", graphWidth).attr('height',graphHeight);
+		var colors = ['#44B3C2', '#F1A94E', '#E45641', '#7B8D8E', 'gold',
+						'#32B92D',	'#FF6EB0',	'#FFCB00',	'#93228D',
+						'#B84B9E', '#F20075'];
+		var selection = preppedSVG ? d3.select('#graphy-graph').select('svg') :  d3.select('#graphy-graph').append("svg").attr("width", graphWidth).attr('height',graphHeight);
 
 		var wordsArr = [];
 		Object.keys(words).forEach(function(key) {
@@ -134,25 +96,51 @@ App.tweetsController = Em.ArrayController.create({
 					return colors[i % colors.length];
 				}).style('opacity', opacitizer);
 
-		this.set('preppedSVG', true);
+		preppedSVG = true;
 	}
-});
 
-App.recentUsersController = Em.ArrayController.create({
-	content: [],
-	addUser: function(name) {
-		if ( this.contains(name) ) this.removeObject(name);
-		this.pushObject(name);
-	},
-	// functions called by an {{action}} in a view have the corresponding view passed as the first argument
-	removeUser: function(view){
-		this.removeObject(view.context);
-	},
-	searchAgain: function(view){
-		App.tweetsController.set('username', view.context);
-		App.tweetsController.loadTweets();
-	},
-	reverse: function(){
-		return this.toArray().reverse();
-	}.property('@each')
-});
+
+	function fetchData(name) {
+		if (!name) { return; }
+		name = window.encodeURIComponent(name);
+		
+		let url = `/twitter-spitter/twitter_talker.php?screen_name=${name}`;
+		// push username to recent user array
+		window.fetch(url).then((resp) => resp.json())
+		.then(function(data) {
+			const tweets = data.map(function(dat){
+				return{
+					avatar: dat.user.profile_image_url,
+					screen_name: dat.user.screen_name,
+					text: dat.text,
+					date: dat.created_at
+				};
+			});
+
+			graphData(tweets);
+			listTweets(tweets);
+			return tweets;
+		});
+	}
+
+	function listTweets(toDisplay) {
+		if (!Array.isArray(toDisplay) || !toDisplay.length) {
+			tweetList.innerHTML = '<li>No Data</li>';
+			return;
+		}
+		const html = toDisplay.map(tweetTemplate).join('');
+		tweetList.innerHTML = html;
+	}
+
+	function tweetTemplate(dat) {
+		return `<li>
+					<img src="${dat.avatar}" class="person-image" >
+					<span>${dat.date}</span>
+					<h3>${dat.screen_name}</h3>
+					<p>${dat.text}</p>
+				</li>`;
+	}
+
+	return {
+	};
+}

@@ -6,7 +6,12 @@
 html,
 body {
     height: 100%;
+    font-family: 'Open Sans', sans-serif;
     /* The html and body elements cannot have any padding or margin. */
+}
+
+h1, h3 {
+    font-family: 'Carter One', cursive;
 }
 
 /* Wrapper for page content to push down footer */
@@ -51,11 +56,6 @@ body {
     margin: 20px 0;
 }
 
-#content {
-   /*font-family: "Helvetica Neue";*/
-
-}
-
 .person-name {
     float: left;
 }
@@ -87,7 +87,11 @@ body {
 #frm {
     padding-left: 77px;
     vertical-align: middle;
-    display: table-cell;
+    display: inline-block;
+}
+
+#frm input {
+    margin-top: 10px;
 }
 
 
@@ -104,38 +108,24 @@ body {
 }
 
 #tweets {
-    width: 385px;
-    float: right;
+    width: 676px;
 }
 #tweets ul {
     padding: 0;
-    border: 1px solid #999999;
+    border: 1px solid #efefef;
 }
 #tweets ul li {
     text-align: left;
     margin: 0;
     padding: 10px;
     list-style: none;
-    border-bottom: 1px solid #999999;
+    border-bottom: 1px solid #efefef;
     min-height: 50px;
-    background: #eeeeee; /* Old browsers */
-    background: -moz-linear-gradient(top,  #eeeeee 0%, #dddddd 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#dddddd)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* IE10+ */
-    background: linear-gradient(top,  #eeeeee 0%,#dddddd 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#dddddd',GradientType=0 ); /* IE6-9 */
+    background-color: #fcfafb;
 }
+
 #tweets ul li:hover {
-    background: #cfe7fa; /* Old browsers */
-    background: -moz-linear-gradient(top,  #cfe7fa 0%, #6393c1 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfe7fa), color-stop(100%,#6393c1)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* IE10+ */
-    background: linear-gradient(top,  #cfe7fa 0%,#6393c1 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cfe7fa', endColorstr='#6393c1',GradientType=0 ); /* IE6-9 */
+    background-color: lightsalmon;
 }
 #tweets ul li span {
     float: right;
@@ -150,7 +140,7 @@ body {
 }
 #tweets ul li h3 {
     font-size: 14pt;
-    margin: 0;
+    margin: -7px 0 -3px;
 }
 #tweets ul li p {
     margin: 0;
