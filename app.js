@@ -13,6 +13,10 @@ function TweetBlaster(selector) {
 	const tweetList = container.querySelector('.tweet-list');
 	const form = container.querySelector('#frm');
 	const field = form.querySelector('#user-field');
+	const statsBlock = container.querySelector('.stats-block');
+	const hoveredWordBlock = statsBlock.querySelector('.word');
+	const hoveredWordCount = statsBlock.querySelector('.count'); 
+
 	form.addEventListener('submit', (e) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -28,7 +32,7 @@ function TweetBlaster(selector) {
 		var stripper = /[^a-z\ ]/gi;
 
 		tweets.forEach(function(elem) {
-			var stripped = elem.text.replace(stripper, "").trim();
+			var stripped = elem.text; // .replace(stripper, "").trim();
 			var elems = stripped.split(" ");
 			wordCount += elems.length;
 			elems.forEach(function(elem) {
@@ -39,6 +43,11 @@ function TweetBlaster(selector) {
 				}
 			});
 			rawData.push({date: elem.date, text: elem.text});
+		});
+
+		let maxCount = 0;
+		Object.keys(words).forEach((w) => {
+			maxCount = Math.max(words[w], maxCount); 
 		});
 
 		var graphWidth = 700;
@@ -65,7 +74,11 @@ function TweetBlaster(selector) {
 								attr('cx', 0).
 								attr('cy', 0).
 								attr('r', 0).
-								style('fill', '#999999');
+								style('fill', '#999999')
+								.on('mouseover', function(d,i) { 
+									hoveredWordBlock.innerText = d.text;
+									hoveredWordCount.innerText = d.freq;
+								});
 
 		var removeIdx = 0;
 		circles.exit().transition().
@@ -85,8 +98,14 @@ function TweetBlaster(selector) {
 				// each item transitions 200 millis after the previous one starts
 				return (i+1) * 50;
 			}).duration(2000).
-				attr('cx', function(d, i) {
+				attr('data-name', function(d, i) {
+					return d.text;
+				}).attr('data-count', function(d, i) {
+					return d.freq;
+				})
+				.attr('cx', function(d, i) {
 					return ~~(((i * 50) / d.freq) % graphWidth);
+					// return ~~((d.freq / maxCount) * graphWidth + (d.freq / wordCount) * 50) % graphWidth;
 				}).attr('cy', function(d, i) {
 					return ~~(((d.text.length * 37 )/ d.freq) % graphHeight);
 				}).attr('r', function(d, i) {

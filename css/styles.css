@@ -10,7 +10,8 @@ body {
     /* The html and body elements cannot have any padding or margin. */
 }
 
-h1, h3 {
+h1, h3, 
+.stats-block .word {
     font-family: 'Carter One', cursive;
 }
 
@@ -65,6 +66,11 @@ h1, h3 {
     min-height: 500px;
 }
 
+#graphy-graph circle:hover {
+    stroke: white;
+    stroke-width: 2px;
+}
+
 .spitting-bird {
     position: absolute;
     left: -78px;
@@ -94,18 +100,17 @@ h1, h3 {
     margin-top: 10px;
 }
 
+.stats-block .count {
+    font-family: monospace;
+    margin-left: 3px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 1px solid #777;
+    border-radius: 3px;
+    padding: 0 3px;
+}
+}
 
-#recent {
-        float: left;
-        width: 190px;
-    }
-#recent ol {
-    margin: 0 0 0 15px;
-    padding: 0;
-}
-#recent old li {
-    padding: 5px;
-}
 
 #tweets {
     width: 676px;
