@@ -100,6 +100,10 @@ h1, h3,
     margin-top: 10px;
 }
 
+.stats-block {
+    min-height: 22px;
+}
+
 .stats-block .count {
     font-family: monospace;
     margin-left: 3px;
@@ -109,6 +113,9 @@ h1, h3,
     border-radius: 3px;
     padding: 0 3px;
 }
+
+.stats-block .count:empty {
+    display: none;
 }
 
 
@@ -132,7 +139,7 @@ h1, h3,
 #tweets ul li:hover {
     background-color: lightsalmon;
 }
-#tweets ul li span {
+#tweets ul li .date {
     float: right;
     font-size: 8pt;
     color: #888888;

@@ -15,7 +15,8 @@ function TweetBlaster(selector) {
 	const field = form.querySelector('#user-field');
 	const statsBlock = container.querySelector('.stats-block');
 	const hoveredWordBlock = statsBlock.querySelector('.word');
-	const hoveredWordCount = statsBlock.querySelector('.count'); 
+	const hoveredWordCount = statsBlock.querySelector('.count');
+	let wordColors = {};
 
 	form.addEventListener('submit', (e) => {
 		e.preventDefault();
@@ -33,7 +34,7 @@ function TweetBlaster(selector) {
 
 		tweets.forEach(function(elem) {
 			var stripped = elem.text; // .replace(stripper, "").trim();
-			var elems = stripped.split(" ");
+			var elems = stripped.split(/\W+/gi);
 			wordCount += elems.length;
 			elems.forEach(function(elem) {
 				if (!words[elem]) {
@@ -58,11 +59,13 @@ function TweetBlaster(selector) {
 		var selection = preppedSVG ? d3.select('#graphy-graph').select('svg') :  d3.select('#graphy-graph').append("svg").attr("width", graphWidth).attr('height',graphHeight);
 
 		var wordsArr = [];
-		Object.keys(words).forEach(function(key) {
+		wordColors = {};
+		Object.keys(words).forEach(function(key, i) {
 			wordsArr.push({
 				text: key,
 				freq: words[key]
 			});
+			wordColors[key] = colors[i % colors.length];
 		});
 
 		var opacitizer = function(d, i) {
@@ -77,7 +80,7 @@ function TweetBlaster(selector) {
 								style('fill', '#999999')
 								.on('mouseover', function(d,i) { 
 									hoveredWordBlock.innerText = d.text;
-									hoveredWordCount.innerText = d.freq;
+									hoveredWordCount.innerText = `${d.freq}/${wordCount}`;
 								});
 
 		var removeIdx = 0;
@@ -112,7 +115,7 @@ function TweetBlaster(selector) {
 					return 10 * d.text.length;
 				}).style('fill', function(d, i) {
 					//d.text.length
-					return colors[i % colors.length];
+					return wordColors[d.text];
 				}).style('opacity', opacitizer);
 
 		preppedSVG = true;
@@ -137,6 +140,8 @@ function TweetBlaster(selector) {
 			});
 
 			graphData(tweets);
+			// do second, so colors are tracked
+			// TODO factor this out
 			listTweets(tweets);
 			return tweets;
 		});
@@ -152,14 +157,21 @@ function TweetBlaster(selector) {
 	}
 
 	function tweetTemplate(dat) {
+		/*
+		const coloredWords = dat.text.split(/\W+/gi).map((word) => {
+			const color = wordColors[word] || '#333';
+		 	return `<span style="color:${color};">${word}</span>`; 
+		}).join(' ');
+		*/
 		return `<li>
 					<img src="${dat.avatar}" class="person-image" >
-					<span>${dat.date}</span>
+					<span class="date">${dat.date}</span>
 					<h3>${dat.screen_name}</h3>
-					<p>${dat.text}</p>
+					<p class="tweet-text">${dat.text}</p>
 				</li>`;
 	}
 
 	return {
+		// nothing to expose yet
 	};
 }
