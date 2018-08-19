@@ -148,6 +148,7 @@ h1, h3,
 }
 
 .mode-select .mode[selected] {
+    font-family: 'Carter One', cursive;
     font-weight: 600;
     color: #222;
 }

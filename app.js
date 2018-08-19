@@ -57,8 +57,9 @@ function TweetBlaster(selector) {
 		graphData(lastData);
 	});
 
-	modeSelector.innerHTML = `<span class="mode-label">Mode:</span><br><div class="mode statsy">Statsy</div>
-                              <div class="mode artsy" selected>Artsy</div>`;
+	modeSelector.innerHTML = `<span class="mode-label">Mode:</span><br>
+							  <div class="mode artsy" selected>Artsy</div>
+							  <div class="mode statsy">Statsy</div>`;
 
 	form.addEventListener('submit', (e) => {
 		e.preventDefault();
@@ -112,6 +113,17 @@ function TweetBlaster(selector) {
 		return 0.3 + (d.text.length / maxWordLength) * .6;
 	}
 
+	function buildStatsColors(wordsArr) {
+		// build up the stats colors table based off a words meta array;
+		for (const word of wordsArr) {
+			if (!statsColors[word.occurrences]) {
+				statsColors[word.occurrences] = true;
+			}
+		}
+		Object.keys(statsColors).forEach((key, i) => {
+			statsColors[key] = colors[i % colors.length];
+		});
+	}
 
 	function convertData(tweets) {
 		var rawData = [];
@@ -125,6 +137,7 @@ function TweetBlaster(selector) {
 			var elems = stripped.split(/\W+/gi);
 			wordCount += elems.length;
 			elems.forEach(function(elem) {
+				elem = elem.toLowerCase();
 				if (!wordHash[elem]) {
 					wordHash[elem] = 1;
 				} else {
@@ -178,14 +191,7 @@ function TweetBlaster(selector) {
 				return 0;
 			});
 
-			for (const word of wordsArr) {
-				if (!statsColors[word.occurrences]) {
-					statsColors[word.occurrences] = true;
-				}
-			}
-			Object.keys(wordColors).forEach((key, i) => {
-				statsColors[key] = colors[i % colors.length];
-			});
+			buildStatsColors(wordsArr);
 
 			xScale.domain([0, 21]);
 			yScale.domain([0, Math.ceil(wordsArr.length / 20) + 1])
@@ -277,6 +283,9 @@ function TweetBlaster(selector) {
 			// TODO factor this out
 			listTweets(tweets);
 			return tweets;
+		}).catch(function(err) { 
+			graphData([]);
+			listTweets([]);
 		});
 	}
 
