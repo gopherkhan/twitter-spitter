@@ -118,6 +118,41 @@ h1, h3,
     display: none;
 }
 
+.mode-select {
+    display: block;
+    float:right;
+    height: 30px;
+    border-radius: 3px;
+}
+.mode-select .mode-label {
+    font-size: 9px;
+    line-height: 6px;
+    font-weight: 600;
+}
+
+.mode-select .mode {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+    padding: 1px 2px;
+    color: #999;
+    border-radius: 3px;
+    min-width: 50px;
+}
+
+.mode-select .mode:hover {
+    background-color: lightcoral;
+    color: #555;
+    font-weight: 600;
+}
+
+.mode-select .mode[selected] {
+    font-weight: 600;
+    color: #222;
+}
+
+
 
 #tweets {
     width: 676px;
