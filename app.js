@@ -27,9 +27,24 @@ function TweetBlaster(selector) {
 	var colors = ['#44B3C2', '#F1A94E', '#E45641', '#7B8D8E', 'gold',
 						'#32B92D',	'#FF6EB0',	'#FFCB00',	'#93228D',
 						'#B84B9E', '#F20075'];
+	var alternateColors = [
+		//'#8dd3c7',
+		//'#ffffb3',
+		'#bebada',
+		'#fb8072',
+		'#80b1d3',
+		'#fdb462',
+		'#b3de69',
+		'#fccde5',
+		'#d9d9d9',
+		'#bc80bd',
+		'#ccebc5',
+		'#ffed6f'
+	];
 
 	var wordCount = 0;
 	var maxWordLength = 0;
+	var maxOccurrences = 0;
 	var graphWidth = 700;
 	var graphHeight = 500;
 
@@ -88,7 +103,7 @@ function TweetBlaster(selector) {
 		if (mode === ARTSY) {
 			return 10 * d.text.length;
 		} 
-		return 10;
+		return 10 + (d.occurrences / maxOccurrences) * 5;
 	}
 
 	function toggleMode(toSet) {
@@ -110,7 +125,7 @@ function TweetBlaster(selector) {
 		if (mode === ARTSY) {
 			return (d.occurrences / wordCount) + 0.3;
 		}
-		return 0.3 + (d.text.length / maxWordLength) * .6;
+		return 0.4 + (d.text.length / maxWordLength) * .6;
 	}
 
 	function buildStatsColors(wordsArr) {
@@ -121,7 +136,7 @@ function TweetBlaster(selector) {
 			}
 		}
 		Object.keys(statsColors).forEach((key, i) => {
-			statsColors[key] = colors[i % colors.length];
+			statsColors[key] = alternateColors[i % alternateColors.length];
 		});
 	}
 
@@ -134,7 +149,7 @@ function TweetBlaster(selector) {
 
 		tweets.forEach(function(elem) {
 			var stripped = elem.text.trim();
-			var elems = stripped.split(/\W+/gi);
+			var elems = stripped.split(/[.,\/#!$%\^&\*;:{}=\-_`~()\ \t\n]+/gi);
 			wordCount += elems.length;
 			elems.forEach(function(elem) {
 				elem = elem.toLowerCase();
@@ -151,7 +166,7 @@ function TweetBlaster(selector) {
 		wordColors = {};
 		statsColors = {};
 
-		let maxOccurrences = 0;
+		maxOccurrences = 0;
 		const uniqueWords = Object.keys(wordHash);
 
 		uniqueWords.forEach(function(key, i) {
